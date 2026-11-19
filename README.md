@@ -188,6 +188,19 @@ JellyTCM/
 > 扩展页面的接入方式：在 `pages*.js` 里往 `window.PAGES` 注册一个渲染函数，
 > 需要交互的再往 `window.PAGE_BIND` 注册一个绑定函数，路由会自动识别，**不用改 `app.js`**。
 
+**打一个分发用的压缩包**：改完内容后，在仓库根目录执行
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File pack.ps1
+```
+
+版本号自动从 `app\index.html` 读，产物落在仓库同级目录，命名 `JellyTCM-v<版本>.zip`，
+内部结构是单个 `JellyTCM` 文件夹（含 `index.html` / `README.md` / `assets`），解压双击即用。
+换输出位置加 `-OutDir`，例如 `-OutDir $env:USERPROFILE\Desktop`。
+
+> 注意：改完 `app/` 不会自动重新打包，必须跑一次 `pack.ps1`，
+> 否则手上的压缩包还是上一次的版本。
+
 ## 六、想自己加内容
 
 **加方剂**：往任意 `formulas-*.js` 的数组里追加一条（注意逗号）：
