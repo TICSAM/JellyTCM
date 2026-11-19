@@ -1,0 +1,11 @@
+# 打包产物
+*.zip
+
+# WorkBuddy 会话草稿与暂存
+_待确认/
+.workbuddy/
+
+# 系统垃圾
+Thumbs.db
+desktop.ini
+.DS_Store

@@ -5,9 +5,10 @@
 # The version is read from app\index.html, so the zip name always matches the site.
 # Output layout matches the older releases: a single top-level "JellyTCM" folder
 # containing index.html, README.md and assets\ - just unzip and double-click.
+# Default output is this repo folder itself, so there is only one place to look.
 
 param(
-  [string]$OutDir = (Split-Path -Parent $PSScriptRoot)
+  [string]$OutDir = $PSScriptRoot
 )
 
 $ErrorActionPreference = 'Stop'

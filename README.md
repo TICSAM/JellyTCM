@@ -194,7 +194,7 @@ JellyTCM/
 powershell -NoProfile -ExecutionPolicy Bypass -File pack.ps1
 ```
 
-版本号自动从 `app\index.html` 读，产物落在仓库同级目录，命名 `JellyTCM-v<版本>.zip`，
+版本号自动从 `app\index.html` 读，产物落在仓库根目录（与 `app` 并排），命名 `JellyTCM-v<版本>.zip`，
 内部结构是单个 `JellyTCM` 文件夹（含 `index.html` / `README.md` / `assets`），解压双击即用。
 换输出位置加 `-OutDir`，例如 `-OutDir $env:USERPROFILE\Desktop`。
 
