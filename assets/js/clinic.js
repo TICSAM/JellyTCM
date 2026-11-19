@@ -60,6 +60,21 @@
       </div>
       <div class="ds-list" id="dsList">${DIS().map(dsCard).join('')}</div>
       <div class="card" id="dsEmpty" style="display:none;margin-top:14px;text-align:center;color:var(--muted)">没有匹配的病名，换个词试试</div>
+      ${(()=>{
+        const bases = (window.WANGFU||{}).base || [];
+        if(!bases.length) return '';
+        return `<div class="card" id="wf-base" style="margin-top:18px;padding:14px 16px;scroll-margin-top:76px">
+          <div class="between" style="align-items:baseline;gap:10px;flex-wrap:wrap">
+            <h4 style="font-size:16px;font-family:var(--serif)">王付 · 15 基础方</h4>
+            <a class="mini" href="#/quiz?scope=base" style="color:var(--brand)">练「基础方叠加」→</a>
+          </div>
+          <p class="mini" style="margin-top:6px">基础方针对的是<b>病变属性</b>（气郁、瘀血、寒湿…），不是固定病名或部位；同一属性可跨病使用，两三种属性并见就合方。下列 15 首不在方剂库里做特别标注，集中放在这里按证查用。</p>
+          <div class="chips" style="margin-top:11px">
+            ${bases.map(([nm,tag])=>`<a class="chip" style="text-decoration:none" href="#/formula/${encodeURIComponent(nm)}">${esc(nm)}<i style="font-style:normal;color:var(--muted);font-size:10.5px">·${esc(tag)}</i></a>`).join('')}
+          </div>
+          <p class="mini" style="margin-top:9px">来源：${esc((window.WANGFU||{}).src||'')}（${esc((window.WANGFU||{}).from||'')}）</p>
+        </div>`;
+      })()}
     </div>`;
   }
   function diseaseDetail(d, params){
@@ -136,6 +151,11 @@
       };
     });
     dsFilter();
+    /* 从方剂详情或全站搜索跳进来：定位到「15 基础方」 */
+    if(params && params.get && params.get('go') === 'base'){
+      const el = document.getElementById('wf-base');
+      if(el) setTimeout(()=>el.scrollIntoView({behavior:'smooth', block:'start'}), 60);
+    }
     /* 从全站搜索点「证型」进来：定位到该证型 */
     const z = params && params.get ? parseInt(params.get('z'),10) : NaN;
     if(!isNaN(z)){

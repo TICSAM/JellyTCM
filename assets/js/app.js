@@ -8,7 +8,11 @@
   const ACU = (window.TY && window.TY.acupoints) || [];
   const HB_BY = {}; HB.forEach(h=>HB_BY[h.n]=h);
   const HB_ALIAS = window.HB_ALIAS || {};
-  Object.keys(HB_ALIAS).forEach(k=>{ if(HB_BY[HB_ALIAS[k]] && !HB_BY[k]) HB_BY[k] = HB_BY[HB_ALIAS[k]]; });
+  const ALIAS_OF = {};
+  Object.keys(HB_ALIAS).forEach(k=>{
+    if(HB_BY[HB_ALIAS[k]] && !HB_BY[k]) HB_BY[k] = HB_BY[HB_ALIAS[k]];
+    (ALIAS_OF[HB_ALIAS[k]] = ALIAS_OF[HB_ALIAS[k]] || []).push(k);
+  });
   const FM_BY = {}; FM.forEach(f=>FM_BY[f.n]=f);
   const $ = (s,r)=> (r||document).querySelector(s);
   const $$ = (s,r)=> [...(r||document).querySelectorAll(s)];
@@ -505,7 +509,7 @@
   }
 
   /* ============ 方剂库 ============ */
-  let fState = {q:'', cat:'全部', liu:'全部', base:'全部'};
+  let fState = {q:'', cat:'全部', liu:'全部'};
   function pageFormulas(){
     const cats = ['全部', ...new Set(FM.map(f=>f.cat.split('·')[0]))];
     const lius = ['全部', ...new Set(FM.map(liuGroup).filter(g=>g!=='其他'))];
@@ -527,15 +531,6 @@
       <div style="margin-top:8px" class="chips" id="fliu">
         ${lius.map(c=>`<button class="chip ${fState.liu===c?'on brand':''}" data-liu="${esc(c)}" style="font-size:12px">${esc(c)}</button>`).join('')}
       </div>
-      ${(()=>{
-        const bases = (window.WANGFU||{}).base || [];
-        const n = FM.filter(f=>f.base).length;
-        if(!bases.length) return '';
-        return `<div style="margin-top:8px" class="chips" id="fbase">
-          <button class="chip ${fState.base==='是基础方'?'on gold':''}" data-base="是基础方">★ 基础方 ${n}</button>
-          ${bases.map(([nm,tag])=>`<button class="chip ${fState.base===tag?'on gold':''}" data-base="${esc(tag)}" style="font-size:12px">${esc(tag)}<i style="font-style:normal;color:var(--muted);font-size:10.5px">·${esc(nm)}</i></button>`).join('')}
-        </div>`;
-      })()}
       <div id="flist" class="grid auto-280" style="margin-top:18px"></div>
     </div>`;
   }
@@ -547,8 +542,6 @@
     const list = FM.filter(f=>{
       if(fState.cat!=='全部' && f.cat.split('·')[0]!==fState.cat) return false;
       if(fState.liu!=='全部' && liuGroup(f)!==fState.liu) return false;
-      if(fState.base==='是基础方' && !f.base) return false;
-      if(fState.base!=='全部' && fState.base!=='是基础方' && f.base!==fState.base) return false;
       if(!q) return true;
       if(isAbc) return pyWords(f.py).some(w=>w.startsWith(ql)) || pyWords(f.py).join('').startsWith(ql) || pyInit(f.n).startsWith(ql);
       const hay = f.n + f.eff + f.ind + f.c.map(x=>x.h).join('') + f.book;
@@ -556,7 +549,7 @@
     });
     box.innerHTML = list.length ? list.map(f=>`
       <div class="fcard" data-go="#/formula/${encodeURIComponent(f.n)}">
-        <h4>${esc(f.n)}${f.base?`<span class="tag gold" style="font-size:10px">${esc(f.base)}基础方</span>`:''}${Store.isDue(f.n)?'<span class="tag brand" style="font-size:10px">待复习</span>':''}</h4>
+        <h4>${esc(f.n)}${Store.isDue(f.n)?'<span class="tag brand" style="font-size:10px">待复习</span>':''}</h4>
         <div class="herbs">${esc(f.c.map(x=>x.h).join('、'))}</div>
         <div style="font-size:11.8px;color:var(--muted)">${esc(f.eff)}</div>
         <div class="meta"><span class="tag">${esc(f.cat.split('·')[1]||f.cat)}</span><span class="tag plain book-mark">${esc(f.book)}</span></div>
@@ -576,12 +569,11 @@
         <a class="btn btn-sm" href="#/formulas">← 方剂库</a>
         <span class="tag">${esc(f.cat)}</span>
         ${f.liu?`<span class="tag jade">${esc(f.liu)}</span>`:''}
-        ${f.base?`<span class="tag gold">基础方 · ${esc(f.base)}</span>`:''}
       </div>
       ${f.wf?`<div class="card" style="margin-top:14px;border-left:3px solid var(--brand);background:var(--panel)">
         <div class="between" style="margin-bottom:6px">
           <h4 style="font-size:14.5px">${esc(f.wf.tag)} · 王付《学用经方的思路与方法》</h4>
-          <a class="mini" href="#/formulas?base=是基础方" style="color:var(--brand)">看全部 15 个基础方 →</a>
+          <a class="mini" href="#/disease?go=base" style="color:var(--brand)">在临床病证方看 15 个基础方 →</a>
         </div>
         <p style="font-size:13px;line-height:1.95;color:var(--ink-2)">${f.wf.t}</p>
       </div>`:''}
@@ -769,6 +761,7 @@
       if(hState.nat!=='全部' && herbNat(h)!==hState.nat) return false;
       if(!q) return true;
       if(isAbc) return pyWords(h.py).some(w=>w.startsWith(ql)) || pyWords(h.py).join('').startsWith(ql) || pyInit(h.n).startsWith(ql);
+      if((ALIAS_OF[h.n]||[]).some(a=>a.includes(q))) return true; /* 搜「白虎」也能找到石膏 */
       return (h.n+h.eff+h.ind+(h.la||'')+h.nat).includes(q);
     });
   }
@@ -808,6 +801,7 @@
     const h = HB_BY[nm];
     if(!h) return `<div class="wrap"><p>未找到药材「${esc(nm)}」</p><a class="btn" href="#/herbs">返回药材库</a></div>`;
     const inF = FM.filter(f=>f.c.some(x=>x.h===h.n || HB_ALIAS[x.h]===h.n));
+    const aliasNames = (ALIAS_OF[h.n]||[]).filter(a=>a!==h.n);
     /* 党参常代人参：库中无「含党参」的方，就把用到人参的方列出来，并给出折算 */
     const ALT_OF = {'党参':'人参'};
     const altHerb = ALT_OF[h.n] || '';
@@ -828,6 +822,7 @@
         <span class="tag">${esc(herbPart(h))}</span>
         <span class="tag gold">${esc(h.nat)}</span>
         <span class="tag jade">归${esc(h.mer)}</span>
+        ${aliasNames.length?`<span class="tag" style="font-size:10.5px" title="${esc(aliasNames.join('、'))}">别称 ${esc(aliasNames.slice(0,5).join('、'))}${aliasNames.length>5?'…':''}</span>`:''}
       </div>
       <div class="between" style="align-items:flex-end">
         <div>
@@ -2402,12 +2397,7 @@
     let html = '';
     if(page==='home') html = pageHome();
     else if(page==='theory') html = pageTheory(seg[1]);
-    else if(page==='formulas'){
-      const pb = params.get('base');
-      if(pb && ['是基础方','理气解郁','活血化瘀','温化寒痰','清热化痰','清利湿热','散寒除湿','益气补血','补血温阳','温阳壮阳','滋阴凉血','清热泻火','泻热通下','温阳通下','清利水气','温化水气'].includes(pb)) fState.base = pb;
-      else if(pb === 'none') fState.base = '全部';
-      html = pageFormulas();
-    }
+    else if(page==='formulas') html = pageFormulas();
     else if(page==='formula') html = pageFormula(decodeURIComponent(seg[1]||''));
     else if(page==='herbs') html = pageHerbs();
     else if(page==='herb') html = pageHerb(decodeURIComponent(seg[1]||''));
@@ -2437,6 +2427,8 @@
       setTimeout(()=>{ if(!Q) startQuiz(opts); }, 30);
     }
     // 导航高亮（含分组下拉：组内任意页命中，整组按钮亮起）
+    // 先清空分组，再按当前页重算——否则从「临床」切到「诊法」后，旧分组会一直亮着
+    $$('.nav-dd').forEach(dd=>dd.classList.remove('on'));
     $$('.nav a').forEach(a=>{
       const k = a.getAttribute('href').replace('#/','').split('?')[0] || 'home';
       const inPractice = (page==='wrong'||page==='plan') && k==='quiz';
@@ -2444,7 +2436,7 @@
       const hit = k===page || inPractice || inTools || (page==='formula'&&k==='formulas') || (page==='herb'&&k==='herbs') || ((page==='disease'||page==='analyze'||page==='rx')&&k==='disease');
       a.classList.toggle('on', hit);
       const dd = a.closest('.nav-dd');
-      if(dd) dd.classList.toggle('on', dd.classList.contains('on') || hit);
+      if(dd && hit) dd.classList.add('on');
     });
     $$('#streakVal').forEach(el=>el.textContent = Store.stats().streak);
     bind(page);
@@ -2469,7 +2461,6 @@
       if(q){ q.oninput = ()=>{ fState.q = q.value; renderFormulaList(); }; }
       $$('#fcat .chip').forEach(b=>b.onclick=()=>{ fState.cat=b.dataset.cat; fState.q=''; route(); });
       $$('#fliu .chip').forEach(b=>b.onclick=()=>{ fState.liu=b.dataset.liu; fState.q=''; route(); });
-      $$('#fbase .chip').forEach(b=>b.onclick=()=>{ fState.base=b.dataset.base; fState.q=''; route(); });
       renderFormulaList();
     }
     if(page==='herbs'){
@@ -3017,10 +3008,10 @@
     });
     /* 王付基础方体系入索引 */
     if(window.WANGFU){
-      idx.push({t:'基础方体系', s:'王付 · 学用经方的思路与方法', u:'#/formulas?base=是基础方',
+      idx.push({t:'基础方体系', s:'王付 · 学用经方的思路与方法', u:'#/disease?go=base',
         k:'基础方 王付 经方 思路 方法 气郁 瘀血 寒痰 热痰 湿热 寒湿'.toLowerCase()});
       window.WANGFU.base.forEach(([nm,tag])=>idx.push({
-        t:tag+'基础方', s:'王付基础方 · '+nm, u:'#/formulas?base='+encodeURIComponent(tag),
+        t:tag+'基础方', s:'王付基础方 · '+nm, u:'#/formula/'+encodeURIComponent(nm),
         k:(nm+'基础方 王付').toLowerCase()
       }));
       (window.WANGFU.stack||[]).forEach((st,i)=>idx.push({
