@@ -186,3 +186,34 @@ Object.assign(window.PHOTOS, {
   "砒霜":[{"f":"砒霜.jpg","cap":"砷华结晶 · 砒霜（实拍）","from":"web"}],
   "秫米":[{"f":"秫米.jpg","cap":"种子 · 秫米（实拍）","from":"web"}]
 });
+
+/* v2.15 补缺药材照片：360 图片检索逐张人工核对，仅供学习辨识，版权归原作者 */
+Object.assign(window.PHOTOS, {
+  '余甘子':[{f:'余甘子-web-2.jpg',cap:'干燥果实 · 余甘子 1',from:'web'},{f:'余甘子-web.jpg',cap:'干燥果实 · 余甘子 2',from:'web'}],
+  '金果榄':[{f:'金果榄-web.jpg',cap:'块根 · 金果榄（青牛胆）',from:'web'}],
+  '铁苋':[{f:'铁苋-web.jpg',cap:'鲜草 · 铁苋菜',from:'web'}],
+  '土牛膝':[{f:'土牛膝-web.jpg',cap:'饮片 · 土牛膝（干燥根）',from:'web'}],
+  '肿节风':[{f:'肿节风-web-2.jpg',cap:'饮片 · 肿节风（草珊瑚全草） 1',from:'web'},{f:'肿节风-web.jpg',cap:'饮片 · 肿节风（草珊瑚全草） 2',from:'web'}],
+  '独一味':[{f:'独一味-web.jpg',cap:'干燥叶 · 独一味',from:'web'}],
+  '羊肉':[{f:'羊肉-web.jpg',cap:'生羊肉 · 食材（药材来源）',from:'web'}],
+  '猪肤':[{f:'猪肤-web.jpg',cap:'生鲜猪皮 · 猪肤（药材来源）',from:'web'}],
+  '鸡子白':[{f:'鸡子白-web.jpg',cap:'生鸡蛋清 · 鸡子白',from:'web'}],
+  '文蛤':[{f:'文蛤-web.jpg',cap:'饮片 · 文蛤（贝壳）',from:'web'}],
+  '猪胆汁':[{f:'猪胆汁-web.jpg',cap:'猪胆囊 · 胆汁来源',from:'web'}],
+  '瓜蒂':[{f:'瓜蒂-web.jpg',cap:'干燥果柄 · 甜瓜蒂（瓜蒂）',from:'web'}],
+  '苦酒':[{f:'苦酒-web.jpg',cap:'米醋 · 苦酒',from:'web'}]
+});
+
+/* v2.15 新增十味照片，标题与图源逐条核对 */
+Object.assign(window.PHOTOS, {
+  '番红花':[{f:'番红花-web.jpg',cap:'柱头 · 番红花（藏红花）',from:'web'}],
+  '五指毛桃':[{f:'五指毛桃-web.jpg',cap:'干燥根 · 五指毛桃',from:'web'}],
+  '牛大力':[{f:'牛大力-web.jpg',cap:'干燥根片 · 牛大力',from:'web'}],
+  '藤梨根':[{f:'藤梨根-web.jpg',cap:'干燥根 · 藤梨根（猕猴桃根）',from:'web'}],
+  '石见穿':[{f:'石见穿-web.jpg',cap:'干燥全草 · 石见穿',from:'web'}],
+  '八月札':[{f:'八月札-web.jpg',cap:'干燥果实 · 八月札（预知子）',from:'web'}],
+  '白英':[{f:'白英-web.jpg',cap:'干燥全草 · 白英',from:'web'}],
+  '蛇莓':[{f:'蛇莓-web.jpg',cap:'干燥全草 · 蛇莓',from:'web'}],
+  '鹅不食草':[{f:'鹅不食草-web.jpg',cap:'干燥全草 · 鹅不食草',from:'web'}],
+  '冬凌草':[{f:'冬凌草-web.jpg',cap:'干燥地上部分 · 冬凌草',from:'web'}]
+});

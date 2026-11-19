@@ -1619,3 +1619,23 @@ html[data-theme="dark"] .tu-grad-i i{color:#9fc4c0}
 .jj-item.dup{background:transparent;border-style:dashed}
 .jj-dup{font-size:12.2px;color:var(--muted);margin-top:6px}
 .jj-dup a{color:var(--brand);border-bottom:1px dashed var(--brand)}
+
+/* ========== v2.15 中医术语白话词典 ========== */
+.term{border-bottom:1px dashed var(--brand);color:var(--brand);cursor:help;
+  text-decoration:none;white-space:nowrap;transition:.14s}
+.term:hover{background:var(--brand-soft);border-bottom-style:solid}
+.term-tip{position:fixed;z-index:9999;max-width:340px;min-width:200px;
+  padding:10px 13px;border-radius:7px;border:1px solid var(--line);
+  background:var(--card);color:var(--ink);font-size:12.8px;line-height:1.75;
+  box-shadow:var(--shadow-lg);pointer-events:none}
+.term-tip .tt-k{color:var(--jade);margin-top:6px;padding-top:6px;border-top:1px dashed var(--line)}
+html[data-theme="dark"] .term-tip,html[data-theme="ancient"] .term-tip{background:var(--card-2)}
+.tc{border:1px solid var(--line-2);border-radius:7px;background:var(--card);margin-bottom:7px}
+.tc>summary{cursor:pointer;padding:9px 13px;font-size:13.4px;display:flex;align-items:center;gap:9px;list-style:none}
+.tc>summary::-webkit-details-marker{display:none}
+.tc>summary:before{content:'＋';color:var(--brand);font-family:var(--mono)}
+.tc[open]>summary:before{content:'－'}
+.tc>summary b{color:var(--ink)}
+.tc-b{padding:2px 14px 12px 30px;font-size:12.6px;line-height:1.85;color:var(--ink-2)}
+.tc-b p{margin:3px 0}
+.tc-b b{color:var(--brand);font-weight:600}

@@ -622,7 +622,6 @@
             <p style="font-size:12.2px;color:var(--muted);line-height:1.8;margin-top:3px"><b style="color:var(--jade);font-weight:500">记忆点：</b>${esc(song.k)}</p>
             <div class="row" style="margin-top:10px">
               <button class="btn btn-sm" data-speak="${esc(song.n)}">🔊 朗读歌诀</button>
-              <a class="btn btn-sm" href="#/songs">去歌诀页背</a>
             </div>
           </div>`:''}
 
@@ -632,6 +631,17 @@
             <h4 style="font-size:15px;color:var(--brand);margin:16px 0 8px">方解</h4>
             <p style="font-size:13.5px;line-height:1.95;color:var(--ink-2)">${esc(f.ana)}</p>
           </div>
+
+          ${(()=>{const y=(window.YUANWEN||{})[f.n];
+            if(!y) return '';
+            return `<div class="card" style="margin-top:16px">
+              <div class="between" style="margin-bottom:8px">
+                <h4 style="font-size:15px;color:var(--brand)">原典摘录</h4>
+                <a class="mini" href="#/shanghan">去原文索引 →</a>
+              </div>
+              <blockquote class="case-q">${esc(y.t)}<em>《${esc(y.b)}》· ${esc(y.c)}</em></blockquote>
+              <p class="mini" style="margin-top:7px">个别条文有版本异文，此处取通行读法；校勘请以权威校注本为准。</p>
+            </div>`;})()}
 
           ${window.FEAT ? window.FEAT.caseCard(f) : ''}
 
@@ -2421,6 +2431,7 @@
     if(window.__b3d){ try{ window.__b3d.destroy(); }catch(e){} window.__b3d = null; }
     if(window.__merAnim){ try{ window.__merAnim.destroy(); }catch(e){} }
     view().innerHTML = html;
+    if(window.TERMUI){ try{ window.TERMUI.decorate(view()); }catch(e){} }
     if(page==='quiz' && params.get('start')==='1' && !Q){
       const opts = buildOpts(params.get('scope')||'mix', params.get('mode')||'mix',
         parseInt(params.get('n')||'10',10), params.get('one'));
@@ -2906,7 +2917,7 @@
     FM.forEach(f=>idx.push({
       t:f.n, s:'方剂 · '+f.cat, u:'#/formula/'+encodeURIComponent(f.n),
       py:pyWords(f.py).join('|')+'|'+pyWords(f.py).join(''), ini:pyInit(f.n).toLowerCase(),
-      k:(f.n+f.c.map(x=>x.h).join('')+f.eff+f.ind+f.book).toLowerCase()
+      k:(f.n+f.c.map(x=>x.h).join('')+f.eff+f.ind+f.book+(((window.YUANWEN||{})[f.n]||{}).t||'')).toLowerCase()
     }));
     /* 药材别名：方里写「芍药」「桂皮」也要能搜到白芍、肉桂 */
     const aliasOf = {};
@@ -2921,8 +2932,12 @@
       });
     });
     SONGS.forEach(s=>idx.push({
-      t:s.n, s:'歌诀 · '+s.cat, u:'#/songs', ini:pyInit(s.n).toLowerCase(),
+      t:s.n, s:'歌诀 · '+s.cat, u:'#/formula/'+encodeURIComponent(s.n), ini:pyInit(s.n).toLowerCase(),
       k:(s.n+s.s+s.j).toLowerCase()
+    }));
+    (window.TERMS||[]).forEach(x=>idx.push({
+      t:x.t, s:'术语词典 · '+x.c, u:'#/term/'+encodeURIComponent(x.t), ini:pyInit(x.t).toLowerCase(),
+      k:(x.t+x.m+x.k+'术语 白话 注释').toLowerCase()
     }));
     SYM.forEach(g=>idx.push({
       t:g.k, s:'症状查方 · '+g.items.length+' 首', u:'#/symptom?q='+encodeURIComponent(g.k),
