@@ -1555,9 +1555,13 @@ html[data-theme="ancient"] .ax-in{background:var(--card-2)}
   position:absolute;top:calc(100% + 6px);left:0;min-width:172px;z-index:120;
   background:var(--card);border:1px solid var(--line);border-radius:8px;box-shadow:6px 6px 0 rgba(0,0,0,.08);
   padding:6px;display:flex;flex-direction:column;gap:1px;
-  opacity:0;visibility:hidden;transform:translateY(-6px);transition:.18s;
+  display:none;
 }
-.nav-dd:hover .nav-menu,.nav-dd:focus-within .nav-menu{opacity:1;visibility:visible;transform:translateY(0)}
+/* 用 display 而不是 opacity/visibility 控制显隐：
+   隐藏时不占布局，页面不会被这些绝对定位的隐藏菜单撑宽（手机端横向溢出的根源） */
+.nav-dd:hover .nav-menu,.nav-dd:focus-within .nav-menu{display:flex}
+/* 最右侧的下拉改为右对齐，打开时不越出屏幕右边缘 */
+.nav-dd:nth-last-child(2) .nav-menu{left:auto;right:0}
 .nav-menu a{
   padding:7px 11px;border-radius:5px;font-size:12.8px;color:var(--ink-2);white-space:nowrap;
 }
@@ -1577,3 +1581,46 @@ html[data-theme="dark"] .tu-grad-i{
 html[data-theme="dark"] .tu-grad-i + .tu-grad-i{border-left-color:rgba(255,255,255,.18)}
 html[data-theme="dark"] .tu-grad-i b{color:#dff3f1}
 html[data-theme="dark"] .tu-grad-i i{color:#9fc4c0}
+
+/* ============================================================
+   《伤寒论》条文精讲（#/jiangji）
+   与「原文索引」共用配色，但排版按"读一段想一段"的节奏放宽行距
+   ============================================================ */
+.jj-note{margin-top:14px;padding:12px 16px;background:var(--card-2);border-left:3px solid var(--brand)}
+.jj-note p{font-size:12.4px;line-height:1.95;color:var(--ink-2)}
+.jj-note b{color:var(--brand)}
+.jj-sec{margin-top:26px}
+.jj-sec-t{font-size:16.5px;font-family:var(--serif);color:var(--ink);letter-spacing:.02em;
+  padding-bottom:8px;border-bottom:1px solid var(--line);display:flex;align-items:baseline;gap:10px}
+.jj-sec-t span{font-size:11px;color:var(--muted);font-family:var(--mono);font-weight:400}
+.jj-item{margin-top:12px;padding:13px 16px 14px;border:1px solid var(--line);border-radius:6px;
+  background:var(--card);transition:border-color .2s,box-shadow .2s}
+.jj-item:hover{border-color:var(--brand-2)}
+.jj-item.flash{border-color:var(--brand);box-shadow:0 0 0 3px var(--brand-soft)}
+.jj-hd{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-bottom:8px}
+.jj-no{font-family:var(--mono);font-size:10.5px;color:var(--muted);letter-spacing:.06em}
+.jj-fang{font-size:11.6px;color:var(--brand);border:1px solid var(--brand);border-radius:3px;
+  padding:0 7px;background:var(--brand-soft);text-decoration:none}
+.jj-fang.nolink{opacity:.65;border-style:dashed;background:transparent}
+.jj-yuan{font-size:14.5px;line-height:2.05;font-family:var(--serif);color:var(--ink);
+  padding:2px 0 8px;border-bottom:1px dashed var(--line-2)}
+.jj-body{margin-top:9px}
+.jj-row{display:flex;gap:10px;padding:5px 0;align-items:flex-start}
+.jj-k{flex:0 0 78px;font-size:11.4px;color:var(--brand);font-weight:600;letter-spacing:.02em;
+  padding-top:2px;white-space:nowrap}
+.jj-v{flex:1;font-size:13.2px;line-height:1.95;color:var(--ink-2)}
+.jj-an{margin-top:8px;padding:9px 12px;background:var(--card-2);border-radius:5px;
+  font-size:12.6px;line-height:1.9;color:var(--ink-2)}
+.jj-an b{display:inline-block;font-size:10.6px;color:var(--brand);background:var(--brand-soft);
+  border-radius:3px;padding:1px 6px;margin-right:8px;font-weight:600}
+.jj-key{margin-top:8px;font-size:12.4px;line-height:1.8;color:var(--brand);
+  font-family:var(--serif);border-left:2px solid var(--brand);padding-left:9px}
+@media (max-width:640px){
+  .jj-k{flex-basis:64px;font-size:11px}
+  .jj-yuan{font-size:14px;line-height:1.95}
+  .jj-v{font-size:12.8px}
+  .jj-item{padding:11px 12px 12px}
+}
+.jj-item.dup{background:transparent;border-style:dashed}
+.jj-dup{font-size:12.2px;color:var(--muted);margin-top:6px}
+.jj-dup a{color:var(--brand);border-bottom:1px dashed var(--brand)}

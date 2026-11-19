@@ -18,7 +18,7 @@
     shPage = Math.min(shPage, pages-1);
     const view = list.slice(shPage*PER, shPage*PER+PER);
     return `<div class="view">
-      <div class="row" style="margin-bottom:12px"><a class="btn btn-sm" href="#/tools">← 工具台</a></div>
+      <div class="row" style="margin-bottom:12px"><a class="btn btn-sm" href="#/tools">← 工具台</a><a class="btn btn-sm btn-dark" href="#/jiangji">条文精讲 · 逐条读 →</a></div>
       <div class="between">
         <div><h1 style="font-size:25px">《伤寒论》原文索引</h1>
           <p style="font-size:12.8px;color:var(--muted);margin-top:4px">已收录 <b style="color:var(--brand)">${SH.length}</b> 条精要条文 · 依宋本通行文字 · 编号为本站「篇·序」，非宋本条号</p></div>
@@ -32,7 +32,7 @@
       </div>
       <div class="sh-list" style="margin-top:14px">
         ${view.map(x=>`<div class="sh-item">
-          <div class="sh-meta"><span class="sh-no">${esc(x.n)}</span>${x.tag?`<span class="tag">${esc(x.tag)}</span>`:''}${x.f?`<a class="sh-f" href="#/formula/${encodeURIComponent(x.f)}">${esc(x.f)}</a>`:''}</div>
+          <div class="sh-meta"><span class="sh-no">${esc(x.n)}</span>${x.tag?`<span class="tag">${esc(x.tag)}</span>`:''}${x.f?`<a class="sh-f" href="#/formula/${encodeURIComponent(x.f)}">${esc(x.f)}</a>`:''}${(window.JJ&&window.JJ[x.n])?`<a class="sh-f" href="#/jiangji?p=${encodeURIComponent(x.b)}&n=${encodeURIComponent(x.n)}" title="看这一条的逐句讲解">精讲</a>`:''}</div>
           <p class="sh-t">${esc(x.t)}</p>
         </div>`).join('') || '<div class="card" style="text-align:center;color:var(--muted)">没有匹配的条文</div>'}
       </div>

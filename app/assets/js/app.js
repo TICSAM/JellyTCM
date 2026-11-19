@@ -371,6 +371,7 @@
             </div>
             <div class="row" style="margin-top:14px">
               <a class="btn btn-sm" href="#/charts?tab=liujing">看六经病位图 →</a>
+              <a class="btn btn-sm btn-dark" href="#/jiangji">逐条读原文精讲 →</a>
             </div>
           </div>
         </div>
@@ -2379,8 +2380,8 @@
   /* ============ 路由 ============ */
   /* 列表页滚动位置记忆：从详情返回列表时停在原处 */
   const SCROLL = {};
-  const RESTORE_PAGES = new Set(['/herbs','/formulas','/theory','/songs','/wrong','/plan','/cases','/family','/data','/prescribe','/puzzle','/rx']);
-  const LIST_PAGES = new Set(['herbs','formulas','songs','wrong','plan','theory']);
+  const RESTORE_PAGES = new Set(['/herbs','/formulas','/theory','/songs','/wrong','/plan','/cases','/family','/data','/prescribe','/puzzle','/rx','/jiangji','/shanghan']);
+  const LIST_PAGES = new Set(['herbs','formulas','songs','wrong','plan','theory','jiangji','shanghan']);
   const isDetailKey = k => k.split('/').filter(Boolean).length >= 2;
   let curPath = '';        // 上一次路由的 path（不含 query）
   let curKey  = '';        // 上一次路由的滚动键
@@ -3003,6 +3004,17 @@
       t:c.n, s:c.src?'医案 · 名家医案':'医案 · 示例病案', u:'#/cases',
       k:('医案 '+(c.jin?c.jin.p+c.jin.s+c.jin.r:'')+c.n).toLowerCase()
     }));
+    /* 条文精讲入索引：搜「但欲寐」「懊憹」「蒸蒸而振」直达那一条 */
+    (window.SHANGHAN||[]).forEach(x=>{
+      const d = (window.JJ||{})[x.n] || {};
+      idx.push({
+        t:x.n+' '+x.t.slice(0,18)+(x.t.length>18?'…':''),
+        s:'条文精讲 · '+x.b+'篇'+(x.f?' · '+x.f:'')+(x.tag?' · '+x.tag:''),
+        u:'#/jiangji?p='+encodeURIComponent(x.b)+'&n='+encodeURIComponent(x.n),
+        ini:pyInit(x.t).toLowerCase(),
+        k:(x.t+' '+(x.f||'')+' '+(x.tag||'')+' '+(d.yi||'')+' '+(d.yao||'')+' '+(d.wu||'')+' '+(d.an||'')+' '+(d.key||'')+' 条文 精讲').toLowerCase()
+      });
+    });
     /* 王付基础方体系入索引 */
     if(window.WANGFU){
       idx.push({t:'基础方体系', s:'王付 · 学用经方的思路与方法', u:'#/formulas?base=是基础方',
